@@ -62,4 +62,7 @@ def get_response_image(image_path):
 
 if __name__ == '__main__':
     # 서버 실행
-    app.run(debug=True, host='0.0.0.0', ssl_context='adhoc')
+    ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS)
+
+    ssl_context.load_cert_chain(certfile='newcert.pem', keyfile='newkey.pem', password='secret')
+    app.run(debug=True, host='0.0.0.0', ssl_context=ssl_context)
