@@ -1,6 +1,6 @@
 import os
 from tokenize import String
-from flask import Flask, render_template, request
+from flask import Flask, redirect, render_template, request
 from werkzeug.utils import secure_filename
 import sys
 from flask_cors import CORS
@@ -20,6 +20,12 @@ app = Flask(__name__)
 api = restful.Api(app)
 CORS(app)
 
+@app.before_request
+def before_request():
+    if request.url.startswith('http://'):
+        url = request.url.replace('http://', 'https://', 1)
+        code = 301
+        return redirect(url, code=code)
 
 # 업로드 HTML 렌더링
 @app.route('/upload')
@@ -62,7 +68,10 @@ def get_response_image(image_path):
 
 if __name__ == '__main__':
     # 서버 실행
-    ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS)
+    # ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS)
+    # ssl_context.load_cert_chain(certfile='newcert.pem', keyfile='newkey.pem', password='secret')
+    # app.run(debug=True, host='0.0.0.0',ssl_context=('cert.pem', 'key.pem'))
+    # app.run(debug=True, host='0.0.0.0', ssl_context=('certificates/cert.pem', 'certificates/key.pem'))
+    app.run(debug=True, host='0.0.0.0',ssl_context='adhoc')
+    # app.run(ssl_context=('cert.pem', 'key.pem'))
 
-    ssl_context.load_cert_chain(certfile='newcert.pem', keyfile='newkey.pem', password='secret')
-    app.run(debug=True, host='0.0.0.0', ssl_context=ssl_context)
