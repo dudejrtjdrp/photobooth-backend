@@ -13,6 +13,8 @@ from flask import jsonify
 import flask_restful as restful
 import time
 from datetime import datetime
+import ssl
+
 
 app = Flask(__name__)
 api = restful.Api(app)
@@ -60,4 +62,4 @@ def get_response_image(image_path):
 
 if __name__ == '__main__':
     # 서버 실행
-    app.run(debug=True, ssl_context='adhoc')
+    app.run(debug=True, host='0.0.0.0', ssl_context='adhoc')
